@@ -1,0 +1,31 @@
+name: build and test feature branch
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  build-feature:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          # Añade aquí las opciones de 'sparse-checkout' si las necesitas
+          # Por ejemplo, para fetchear sólo los archivos raíz y la carpeta .github y src:
+          sparse-checkout: |
+            .github
+            src
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.0
+        with:
+          distribution: 'temurin' # O elige la distribución que prefieras
+          java-version: '17' # Asegúrate de usar la versión que requieras
+
+      - name: Build with Maven
+        run: mvn -B clean install
+
+      # Agrega aquí cualquier otro paso que necesites, como ejecutar tests
